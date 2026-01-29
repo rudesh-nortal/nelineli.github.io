@@ -240,15 +240,14 @@
             }
 
             draw() {
-                neuralCtx.beginPath();
-                neuralCtx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                neuralCtx.font = '10px Arial';
                 neuralCtx.fillStyle = 'rgba(102, 126, 234, 0.8)';
-                neuralCtx.fill();
+                neuralCtx.fillText('4', this.x, this.y);
                 
                 // Glow effect
                 neuralCtx.shadowBlur = 10;
                 neuralCtx.shadowColor = 'rgba(102, 126, 234, 0.8)';
-                neuralCtx.fill();
+                neuralCtx.fillText('4', this.x, this.y);
                 neuralCtx.shadowBlur = 0;
             }
         }
