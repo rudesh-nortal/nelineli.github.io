@@ -13,18 +13,18 @@
 
         body {
             overflow: hidden;
-            font-family: 'Courier New', monospace;
-            background: #000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
         }
 
-        #matrix-canvas {
+        #neural-canvas {
             position: fixed;
             top: 0;
             left: 0;
             z-index: 1;
         }
 
-        #particles-canvas {
+        #data-flow-canvas {
             position: fixed;
             top: 0;
             left: 0;
@@ -46,292 +46,354 @@
 
         .logo {
             font-size: clamp(2.5rem, 10vw, 5rem);
-            font-weight: bold;
-            background: linear-gradient(45deg, #00ff41, #00d4ff, #ff00de);
-            background-size: 200% 200%;
+            font-weight: 700;
+            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #4facfe);
+            background-size: 300% 300%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: gradientShift 3s ease infinite, glitchLogo 5s infinite;
-            margin-bottom: 20px;
-            text-shadow: 0 0 30px rgba(0, 255, 65, 0.5);
+            animation: aiGradient 4s ease infinite;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+            filter: drop-shadow(0 0 20px rgba(102, 126, 234, 0.5));
         }
 
         .tagline {
-            font-size: clamp(1rem, 3vw, 1.5rem);
-            color: #00ff41;
-            margin-bottom: 40px;
+            font-size: clamp(0.9rem, 3vw, 1.3rem);
+            color: #a8b2d1;
+            margin-bottom: 50px;
             opacity: 0;
-            animation: fadeIn 1s ease forwards 0.5s, flicker 4s infinite 2s;
-            text-shadow: 0 0 10px rgba(0, 255, 65, 0.8);
+            animation: fadeInUp 1s ease forwards 0.3s;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 300;
+        }
+
+        .ai-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(102, 126, 234, 0.2);
+            border: 1px solid rgba(102, 126, 234, 0.5);
+            border-radius: 20px;
+            margin-bottom: 40px;
+            font-size: clamp(0.8rem, 2vw, 1rem);
+            color: #667eea;
+            animation: pulse 2s ease-in-out infinite;
         }
 
         .contact-box {
-            background: rgba(0, 20, 40, 0.8);
-            border: 2px solid #00ff41;
-            border-radius: 15px;
-            padding: 30px 40px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 0 40px rgba(0, 255, 65, 0.3), inset 0 0 20px rgba(0, 255, 65, 0.1);
-            animation: pulse 2s ease-in-out infinite, float 6s ease-in-out infinite;
-            transform-style: preserve-3d;
+            padding: 20px;
         }
 
         h2 {
-            color: #00d4ff;
-            font-size: clamp(1.2rem, 4vw, 1.8rem);
-            margin-bottom: 25px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            animation: neonGlow 2s ease-in-out infinite;
+            display: none;
         }
 
         .contact-info {
             display: flex;
             flex-direction: column;
             gap: 20px;
+            position: relative;
+            z-index: 1;
         }
 
         .contact-item {
-            color: #fff;
-            font-size: clamp(1rem, 3vw, 1.5rem);
-            padding: 15px;
-            background: rgba(0, 255, 65, 0.1);
-            border-radius: 10px;
-            border-left: 4px solid #00ff41;
-            transition: all 0.3s ease;
+            color: #e6f1ff;
+            font-size: clamp(1.1rem, 3vw, 1.5rem);
+            padding: 10px 0;
             cursor: pointer;
+            transition: color 0.3s ease;
         }
 
         .contact-item:hover {
-            background: rgba(0, 255, 65, 0.2);
-            transform: translateX(10px) scale(1.05);
-            box-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+            color: #667eea;
         }
 
         .icon {
             display: inline-block;
-            margin-right: 10px;
-            animation: rotate 3s linear infinite;
+            margin-right: 12px;
+            font-size: 1.2em;
         }
 
-        @keyframes gradientShift {
+        .ai-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+            color: #a8b2d1;
+            font-size: clamp(0.7rem, 2vw, 0.9rem);
+        }
+
+        .stat-number {
+            display: block;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            font-weight: bold;
+            background: linear-gradient(45deg, #667eea, #f093fb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: countUp 2s ease-out;
+        }
+
+        @keyframes aiGradient {
             0%, 100% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
         }
 
         @keyframes pulse {
-            0%, 100% { box-shadow: 0 0 40px rgba(0, 255, 65, 0.3), inset 0 0 20px rgba(0, 255, 65, 0.1); }
-            50% { box-shadow: 0 0 60px rgba(0, 255, 65, 0.6), inset 0 0 30px rgba(0, 255, 65, 0.2); }
+            0%, 100% { 
+                box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 0 10px rgba(102, 126, 234, 0);
+                transform: scale(1.02);
+            }
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0px) rotateX(0deg); }
-            50% { transform: translateY(-20px) rotateX(5deg); }
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
         }
 
-        @keyframes neonGlow {
-            0%, 100% { 
-                text-shadow: 0 0 10px #00d4ff, 0 0 20px #00d4ff, 0 0 30px #00d4ff;
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
             }
-            50% { 
-                text-shadow: 0 0 20px #00d4ff, 0 0 40px #00d4ff, 0 0 60px #00d4ff;
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
-        @keyframes fadeIn {
-            to { opacity: 1; }
+        @keyframes scan {
+            0% { transform: translateY(-50%) rotate(0deg); }
+            100% { transform: translateY(50%) rotate(0deg); }
         }
 
-        @keyframes flicker {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-
-        @keyframes glitchLogo {
-            0%, 90%, 100% { transform: translate(0); }
-            92% { transform: translate(-2px, 2px); }
-            94% { transform: translate(2px, -2px); }
-            96% { transform: translate(-2px, -2px); }
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        @keyframes countUp {
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         @media (max-width: 768px) {
             .contact-box {
-                padding: 20px 25px;
+                padding: 25px 30px;
+            }
+            .ai-stats {
+                gap: 20px;
             }
         }
     </style>
 </head>
 <body>
-    <canvas id="matrix-canvas"></canvas>
-    <canvas id="particles-canvas"></canvas>
+    <canvas id="neural-canvas"></canvas>
+    <canvas id="data-flow-canvas"></canvas>
     
     <div class="container">
-        <div class="logo">NELINELI</div>
-        <div class="tagline">// IT Solutions & Services //</div>
+        <div class="logo">NeliNeli</div>
         
         <div class="contact-box">
-            <h2>[ Connect With Us ]</h2>
+            <h2>Connect With Us</h2>
             <div class="contact-info">
                 <div class="contact-item">
-                    <span class="icon">📧</span>
                     <span>info@nelineli.ee</span>
                 </div>
                 <div class="contact-item">
-                    <span class="icon">📱</span>
-                    <span>+372 55585572</span>
+                    <span>+372 5558 5572</span>
                 </div>
             </div>
         </div>
+
     </div>
 
     <script>
-        // Matrix Rain Effect
-        const matrixCanvas = document.getElementById('matrix-canvas');
-        const matrixCtx = matrixCanvas.getContext('2d');
+        // Neural Network Visualization
+        const neuralCanvas = document.getElementById('neural-canvas');
+        const neuralCtx = neuralCanvas.getContext('2d');
         
-        matrixCanvas.width = window.innerWidth;
-        matrixCanvas.height = window.innerHeight;
+        neuralCanvas.width = window.innerWidth;
+        neuralCanvas.height = window.innerHeight;
 
-        const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
-        const fontSize = 14;
-        const columns = matrixCanvas.width / fontSize;
-        const drops = Array(Math.floor(columns)).fill(1);
-
-        function drawMatrix() {
-            matrixCtx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-            matrixCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
-            
-            matrixCtx.fillStyle = '#00ff41';
-            matrixCtx.font = fontSize + 'px monospace';
-
-            for (let i = 0; i < drops.length; i++) {
-                const text = chars[Math.floor(Math.random() * chars.length)];
-                matrixCtx.fillText(text, i * fontSize, drops[i] * fontSize);
-                
-                if (drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) {
-                    drops[i] = 0;
-                }
-                drops[i]++;
-            }
-        }
-
-        setInterval(drawMatrix, 35);
-
-        // Interactive Particles
-        const particlesCanvas = document.getElementById('particles-canvas');
-        const particlesCtx = particlesCanvas.getContext('2d');
-        
-        particlesCanvas.width = window.innerWidth;
-        particlesCanvas.height = window.innerHeight;
-
-        const particles = [];
-        const particleCount = 80;
-        const mouse = { x: null, y: null, radius: 150 };
-
-        class Particle {
+        class Neuron {
             constructor() {
-                this.x = Math.random() * particlesCanvas.width;
-                this.y = Math.random() * particlesCanvas.height;
-                this.size = Math.random() * 3 + 1;
-                this.speedX = Math.random() * 2 - 1;
-                this.speedY = Math.random() * 2 - 1;
-                this.color = `rgba(0, ${Math.random() * 255}, ${Math.random() * 255}, 0.8)`;
+                this.x = Math.random() * neuralCanvas.width;
+                this.y = Math.random() * neuralCanvas.height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = Math.random() * 2 + 1;
+                this.connections = [];
             }
 
             update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
+                this.x += this.vx;
+                this.y += this.vy;
 
-                if (this.x > particlesCanvas.width || this.x < 0) this.speedX *= -1;
-                if (this.y > particlesCanvas.height || this.y < 0) this.speedY *= -1;
+                if (this.x < 0 || this.x > neuralCanvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > neuralCanvas.height) this.vy *= -1;
+            }
 
-                // Mouse interaction
-                if (mouse.x && mouse.y) {
-                    const dx = mouse.x - this.x;
-                    const dy = mouse.y - this.y;
+            draw() {
+                neuralCtx.beginPath();
+                neuralCtx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                neuralCtx.fillStyle = 'rgba(102, 126, 234, 0.8)';
+                neuralCtx.fill();
+                
+                // Glow effect
+                neuralCtx.shadowBlur = 10;
+                neuralCtx.shadowColor = 'rgba(102, 126, 234, 0.8)';
+                neuralCtx.fill();
+                neuralCtx.shadowBlur = 0;
+            }
+        }
+
+        const neurons = [];
+        const neuronCount = 80;
+
+        for (let i = 0; i < neuronCount; i++) {
+            neurons.push(new Neuron());
+        }
+
+        function connectNeurons() {
+            for (let i = 0; i < neurons.length; i++) {
+                for (let j = i + 1; j < neurons.length; j++) {
+                    const dx = neurons[i].x - neurons[j].x;
+                    const dy = neurons[i].y - neurons[j].y;
                     const distance = Math.sqrt(dx * dx + dy * dy);
-                    
-                    if (distance < mouse.radius) {
-                        this.x -= dx / distance * 2;
-                        this.y -= dy / distance * 2;
+
+                    if (distance < 150) {
+                        const opacity = 1 - distance / 150;
+                        const gradient = neuralCtx.createLinearGradient(
+                            neurons[i].x, neurons[i].y,
+                            neurons[j].x, neurons[j].y
+                        );
+                        gradient.addColorStop(0, `rgba(102, 126, 234, ${opacity * 0.3})`);
+                        gradient.addColorStop(0.5, `rgba(118, 75, 162, ${opacity * 0.3})`);
+                        gradient.addColorStop(1, `rgba(240, 147, 251, ${opacity * 0.3})`);
+                        
+                        neuralCtx.strokeStyle = gradient;
+                        neuralCtx.lineWidth = 1;
+                        neuralCtx.beginPath();
+                        neuralCtx.moveTo(neurons[i].x, neurons[i].y);
+                        neuralCtx.lineTo(neurons[j].x, neurons[j].y);
+                        neuralCtx.stroke();
                     }
+                }
+            }
+        }
+
+        function animateNeuralNetwork() {
+            neuralCtx.fillStyle = 'rgba(15, 12, 41, 0.1)';
+            neuralCtx.fillRect(0, 0, neuralCanvas.width, neuralCanvas.height);
+
+            neurons.forEach(neuron => {
+                neuron.update();
+                neuron.draw();
+            });
+
+            connectNeurons();
+            requestAnimationFrame(animateNeuralNetwork);
+        }
+
+        animateNeuralNetwork();
+
+        // Data Flow Visualization
+        const dataCanvas = document.getElementById('data-flow-canvas');
+        const dataCtx = dataCanvas.getContext('2d');
+        
+        dataCanvas.width = window.innerWidth;
+        dataCanvas.height = window.innerHeight;
+
+        class DataPoint {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * dataCanvas.width;
+                this.y = -10;
+                this.speed = Math.random() * 2 + 1;
+                this.size = Math.random() * 3 + 1;
+                this.opacity = Math.random() * 0.5 + 0.3;
+                this.color = ['#667eea', '#764ba2', '#f093fb', '#4facfe'][Math.floor(Math.random() * 4)];
+            }
+
+            update() {
+                this.y += this.speed;
+                if (this.y > dataCanvas.height) {
+                    this.reset();
                 }
             }
 
             draw() {
-                particlesCtx.fillStyle = this.color;
-                particlesCtx.beginPath();
-                particlesCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                particlesCtx.fill();
+                dataCtx.fillStyle = this.color;
+                dataCtx.globalAlpha = this.opacity;
+                dataCtx.beginPath();
+                dataCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                dataCtx.fill();
+                dataCtx.globalAlpha = 1;
             }
         }
 
-        for (let i = 0; i < particleCount; i++) {
-            particles.push(new Particle());
+        const dataPoints = [];
+        for (let i = 0; i < 50; i++) {
+            dataPoints.push(new DataPoint());
         }
 
-        function connectParticles() {
-            for (let i = 0; i < particles.length; i++) {
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distance < 100) {
-                        particlesCtx.strokeStyle = `rgba(0, 255, 65, ${1 - distance / 100})`;
-                        particlesCtx.lineWidth = 0.5;
-                        particlesCtx.beginPath();
-                        particlesCtx.moveTo(particles[i].x, particles[i].y);
-                        particlesCtx.lineTo(particles[j].x, particles[j].y);
-                        particlesCtx.stroke();
-                    }
-                }
-            }
-        }
-
-        function animateParticles() {
-            particlesCtx.clearRect(0, 0, particlesCanvas.width, particlesCanvas.height);
+        function animateDataFlow() {
+            dataCtx.clearRect(0, 0, dataCanvas.width, dataCanvas.height);
             
-            particles.forEach(particle => {
-                particle.update();
-                particle.draw();
+            dataPoints.forEach(point => {
+                point.update();
+                point.draw();
             });
             
-            connectParticles();
-            requestAnimationFrame(animateParticles);
+            requestAnimationFrame(animateDataFlow);
         }
 
-        animateParticles();
+        animateDataFlow();
 
-        // Mouse move event
+        // Mouse interaction
+        let mouseX = 0, mouseY = 0;
         window.addEventListener('mousemove', (e) => {
-            mouse.x = e.x;
-            mouse.y = e.y;
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            
+            neurons.forEach(neuron => {
+                const dx = mouseX - neuron.x;
+                const dy = mouseY - neuron.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < 100) {
+                    neuron.vx -= dx / distance * 0.1;
+                    neuron.vy -= dy / distance * 0.1;
+                }
+            });
         });
 
         // Resize handling
         window.addEventListener('resize', () => {
-            matrixCanvas.width = window.innerWidth;
-            matrixCanvas.height = window.innerHeight;
-            particlesCanvas.width = window.innerWidth;
-            particlesCanvas.height = window.innerHeight;
+            neuralCanvas.width = window.innerWidth;
+            neuralCanvas.height = window.innerHeight;
+            dataCanvas.width = window.innerWidth;
+            dataCanvas.height = window.innerHeight;
         });
 
-        // Click contact items to copy
+        // Click to copy
         document.querySelectorAll('.contact-item').forEach(item => {
             item.addEventListener('click', () => {
                 const text = item.textContent.trim().split(' ').pop();
                 navigator.clipboard.writeText(text).then(() => {
-                    item.style.background = 'rgba(0, 255, 65, 0.4)';
+                    item.style.background = 'linear-gradient(135deg, rgba(102, 126, 234, 0.5), rgba(118, 75, 162, 0.5))';
                     setTimeout(() => {
-                        item.style.background = 'rgba(0, 255, 65, 0.1)';
-                    }, 300);
+                        item.style.background = 'linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15))';
+                    }, 400);
                 });
             });
         });
