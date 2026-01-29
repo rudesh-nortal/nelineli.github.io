@@ -5,72 +5,336 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>nelineli ou</title>
     <style>
-        body {
+        * {
             margin: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
-            font-family: Arial, sans-serif;
-            padding: 20px;
+            padding: 0;
             box-sizing: border-box;
         }
 
-        h1 {
-            color: white;
-            font-size: clamp(2rem, 8vw, 4rem);
-            animation: bounce 2s ease-in-out infinite, colorChange 4s ease-in-out infinite;
-            margin: 0;
-            word-break: break-word;
+        body {
+            overflow: hidden;
+            font-family: 'Courier New', monospace;
+            background: #000;
         }
 
-        p {
-            color: white;
-            font-size: clamp(1.2rem, 4vw, 2rem);
-            margin-top: 20px;
-            animation: colorChange 4s ease-in-out infinite;
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1;
         }
 
-        h2 {
-            color: white;
-            font-size: clamp(1.5rem, 5vw, 2.5rem);
-            margin-bottom: 30px;
-            animation: colorChange 4s ease-in-out infinite;
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 2;
+            pointer-events: none;
         }
 
         .container {
+            position: relative;
+            z-index: 3;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
-            max-width: 100%;
-            padding: 0 15px;
+            padding: 20px;
         }
 
-        @keyframes bounce {
-            0%, 100% {
-                transform: translateY(0);
+        .logo {
+            font-size: clamp(2.5rem, 10vw, 5rem);
+            font-weight: bold;
+            background: linear-gradient(45deg, #00ff41, #00d4ff, #ff00de);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease infinite, glitchLogo 5s infinite;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(0, 255, 65, 0.5);
+        }
+
+        .tagline {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            color: #00ff41;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeIn 1s ease forwards 0.5s, flicker 4s infinite 2s;
+            text-shadow: 0 0 10px rgba(0, 255, 65, 0.8);
+        }
+
+        .contact-box {
+            background: rgba(0, 20, 40, 0.8);
+            border: 2px solid #00ff41;
+            border-radius: 15px;
+            padding: 30px 40px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 40px rgba(0, 255, 65, 0.3), inset 0 0 20px rgba(0, 255, 65, 0.1);
+            animation: pulse 2s ease-in-out infinite, float 6s ease-in-out infinite;
+            transform-style: preserve-3d;
+        }
+
+        h2 {
+            color: #00d4ff;
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            animation: neonGlow 2s ease-in-out infinite;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .contact-item {
+            color: #fff;
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            padding: 15px;
+            background: rgba(0, 255, 65, 0.1);
+            border-radius: 10px;
+            border-left: 4px solid #00ff41;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .contact-item:hover {
+            background: rgba(0, 255, 65, 0.2);
+            transform: translateX(10px) scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+        }
+
+        .icon {
+            display: inline-block;
+            margin-right: 10px;
+            animation: rotate 3s linear infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 40px rgba(0, 255, 65, 0.3), inset 0 0 20px rgba(0, 255, 65, 0.1); }
+            50% { box-shadow: 0 0 60px rgba(0, 255, 65, 0.6), inset 0 0 30px rgba(0, 255, 65, 0.2); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotateX(0deg); }
+            50% { transform: translateY(-20px) rotateX(5deg); }
+        }
+
+        @keyframes neonGlow {
+            0%, 100% { 
+                text-shadow: 0 0 10px #00d4ff, 0 0 20px #00d4ff, 0 0 30px #00d4ff;
             }
-            50% {
-                transform: translateY(-30px);
+            50% { 
+                text-shadow: 0 0 20px #00d4ff, 0 0 40px #00d4ff, 0 0 60px #00d4ff;
             }
         }
 
-        @keyframes colorChange {
-            0%, 100% {
-                color: white;
-                text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-            }
-            50% {
-                color: #ffd700;
-                text-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        @keyframes glitchLogo {
+            0%, 90%, 100% { transform: translate(0); }
+            92% { transform: translate(-2px, 2px); }
+            94% { transform: translate(2px, -2px); }
+            96% { transform: translate(-2px, -2px); }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .contact-box {
+                padding: 20px 25px;
             }
         }
     </style>
 </head>
 <body>
+    <canvas id="matrix-canvas"></canvas>
+    <canvas id="particles-canvas"></canvas>
+    
     <div class="container">
-        <h2>Contact us on the following</h2>
-        <h1>info@nelineli.ee</h1>
-        <p>+372 55585572</p>
+        <div class="logo">NELINELI</div>
+        <div class="tagline">// IT Solutions & Services //</div>
+        
+        <div class="contact-box">
+            <h2>[ Connect With Us ]</h2>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <span class="icon">📧</span>
+                    <span>info@nelineli.ee</span>
+                </div>
+                <div class="contact-item">
+                    <span class="icon">📱</span>
+                    <span>+372 55585572</span>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <script>
+        // Matrix Rain Effect
+        const matrixCanvas = document.getElementById('matrix-canvas');
+        const matrixCtx = matrixCanvas.getContext('2d');
+        
+        matrixCanvas.width = window.innerWidth;
+        matrixCanvas.height = window.innerHeight;
+
+        const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+        const fontSize = 14;
+        const columns = matrixCanvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function drawMatrix() {
+            matrixCtx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            matrixCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+            
+            matrixCtx.fillStyle = '#00ff41';
+            matrixCtx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                matrixCtx.fillText(text, i * fontSize, drops[i] * fontSize);
+                
+                if (drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 35);
+
+        // Interactive Particles
+        const particlesCanvas = document.getElementById('particles-canvas');
+        const particlesCtx = particlesCanvas.getContext('2d');
+        
+        particlesCanvas.width = window.innerWidth;
+        particlesCanvas.height = window.innerHeight;
+
+        const particles = [];
+        const particleCount = 80;
+        const mouse = { x: null, y: null, radius: 150 };
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * particlesCanvas.width;
+                this.y = Math.random() * particlesCanvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = Math.random() * 2 - 1;
+                this.speedY = Math.random() * 2 - 1;
+                this.color = `rgba(0, ${Math.random() * 255}, ${Math.random() * 255}, 0.8)`;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x > particlesCanvas.width || this.x < 0) this.speedX *= -1;
+                if (this.y > particlesCanvas.height || this.y < 0) this.speedY *= -1;
+
+                // Mouse interaction
+                if (mouse.x && mouse.y) {
+                    const dx = mouse.x - this.x;
+                    const dy = mouse.y - this.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < mouse.radius) {
+                        this.x -= dx / distance * 2;
+                        this.y -= dy / distance * 2;
+                    }
+                }
+            }
+
+            draw() {
+                particlesCtx.fillStyle = this.color;
+                particlesCtx.beginPath();
+                particlesCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                particlesCtx.fill();
+            }
+        }
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function connectParticles() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 100) {
+                        particlesCtx.strokeStyle = `rgba(0, 255, 65, ${1 - distance / 100})`;
+                        particlesCtx.lineWidth = 0.5;
+                        particlesCtx.beginPath();
+                        particlesCtx.moveTo(particles[i].x, particles[i].y);
+                        particlesCtx.lineTo(particles[j].x, particles[j].y);
+                        particlesCtx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animateParticles() {
+            particlesCtx.clearRect(0, 0, particlesCanvas.width, particlesCanvas.height);
+            
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+            
+            connectParticles();
+            requestAnimationFrame(animateParticles);
+        }
+
+        animateParticles();
+
+        // Mouse move event
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.x;
+            mouse.y = e.y;
+        });
+
+        // Resize handling
+        window.addEventListener('resize', () => {
+            matrixCanvas.width = window.innerWidth;
+            matrixCanvas.height = window.innerHeight;
+            particlesCanvas.width = window.innerWidth;
+            particlesCanvas.height = window.innerHeight;
+        });
+
+        // Click contact items to copy
+        document.querySelectorAll('.contact-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const text = item.textContent.trim().split(' ').pop();
+                navigator.clipboard.writeText(text).then(() => {
+                    item.style.background = 'rgba(0, 255, 65, 0.4)';
+                    setTimeout(() => {
+                        item.style.background = 'rgba(0, 255, 65, 0.1)';
+                    }, 300);
+                });
+            });
+        });
+    </script>
 </body>
 </html>
