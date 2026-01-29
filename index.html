@@ -4,6 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hello World</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            color: white;
+            font-size: 4rem;
+            animation: bounce 2s ease-in-out infinite, colorChange 4s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-30px);
+            }
+        }
+
+        @keyframes colorChange {
+            0%, 100% {
+                color: white;
+                text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            }
+            50% {
+                color: #ffd700;
+                text-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+            }
+        }
+    </style>
 </head>
 <body>
     <h1>Hello World!</h1>
