@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#000000">
     <title>NeliNeli OÜ</title>
     <meta name="description" content="A simple scroll story about turning business chaos into calm, profitable, steady growth.">
@@ -38,6 +38,7 @@
             font-family: "SF Pro Display", "Inter", "Segoe UI", Arial, sans-serif;
             scroll-behavior: smooth;
             -webkit-font-smoothing: antialiased;
+            -webkit-text-size-adjust: 100%;
             text-rendering: optimizeLegibility;
         }
 
@@ -55,6 +56,7 @@
             filter: saturate(0.9) contrast(1.02);
             transform: scale(calc(1.025 - var(--clarity) * 0.015));
             transition: transform var(--ease-slow);
+            will-change: transform;
             pointer-events: none;
         }
 
@@ -165,6 +167,7 @@
                 box-shadow var(--ease-slow);
             position: relative;
             overflow: hidden;
+            -webkit-transform: translateZ(0);
         }
 
         .panel::before {
@@ -222,6 +225,9 @@
             display: grid;
             gap: 12px;
             grid-template-columns: repeat(3, minmax(130px, 1fr));
+            width: 100%;
+            margin-inline: auto;
+            justify-items: center;
         }
 
         .pain-points li,
@@ -231,6 +237,8 @@
             border: 1px solid rgba(255, 255, 255, 0.24);
             background: rgba(255, 255, 255, 0.08);
             padding: 11px 14px;
+            font-size: clamp(0.9rem, 1.9vw, 1.06rem);
+            text-align: center;
             transform: translate3d(calc((1 - var(--clarity)) * 9px), calc((1 - var(--clarity)) * -6px), 0);
             transition: transform var(--ease-slow), background var(--ease-slow), border-color var(--ease-slow);
         }
@@ -240,6 +248,8 @@
             display: grid;
             gap: 10px;
             margin-top: 6px;
+            width: min(100%, 58ch);
+            margin-inline: auto;
         }
 
         .steps li {
@@ -251,10 +261,12 @@
             flex-wrap: wrap;
             gap: 12px;
             margin-top: 8px;
+            width: 100%;
+            justify-content: center;
         }
 
         .chip {
-            font-size: 0.95rem;
+            font-size: clamp(0.88rem, 1.7vw, 1rem);
             color: rgba(248, 250, 255, 0.95);
             letter-spacing: 0.02em;
         }
@@ -305,6 +317,31 @@
             overflow: hidden;
         }
 
+        #chaos h2,
+        #chaos p,
+        #chaos li,
+        #chaos .eyebrow {
+            filter: blur(calc((1 - var(--clarity)) * 2.1px + 0.55px));
+        }
+
+        #align h2,
+        #align p,
+        #align li,
+        #align .eyebrow {
+            filter: blur(calc((1 - var(--clarity)) * 1.85px + 0.4px));
+        }
+
+        #clarity h2,
+        #clarity p,
+        #clarity li,
+        #clarity .eyebrow,
+        #clarity .chip,
+        #clarity .final-message,
+        #clarity .contact a {
+            filter: none;
+            letter-spacing: 0.01em;
+        }
+
         @media (max-width: 920px) {
             .pain-points {
                 grid-template-columns: 1fr 1fr;
@@ -335,6 +372,80 @@
             .panel {
                 border-radius: 22px;
                 padding: clamp(18px, 4.5vw, 28px);
+            }
+        }
+
+        @media (max-width: 768px), (pointer: coarse) {
+            :root {
+                --blur: 10px;
+                --panel-gap: 18px;
+            }
+
+            .bg-image {
+                transform: none;
+                transition: none;
+            }
+
+            .progress-rail {
+                display: none;
+            }
+
+            .orb.two,
+            .orb.three {
+                opacity: 0.08;
+            }
+
+            .panel {
+                min-height: 68svh;
+                transform: translate3d(calc((1 - var(--clarity)) * 8px), calc((1 - var(--clarity)) * -6px), 0);
+                box-shadow: 0 16px 40px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+            }
+
+            h2 {
+                font-size: clamp(1.35rem, 8.2vw, 2.1rem);
+                max-width: 100%;
+                line-height: 1.1;
+            }
+
+            p,
+            li,
+            .contact a,
+            .eyebrow {
+                letter-spacing: 0.01em;
+            }
+
+            #chaos h2,
+            #chaos p,
+            #chaos li,
+            #chaos .eyebrow {
+                filter: blur(1.65px);
+            }
+
+            #align h2,
+            #align p,
+            #align li,
+            #align .eyebrow {
+                filter: blur(1.05px);
+            }
+
+            #clarity h2,
+            #clarity p,
+            #clarity li,
+            #clarity .eyebrow,
+            #clarity .chip,
+            #clarity .final-message,
+            #clarity .contact a {
+                filter: none;
+            }
+
+            .pain-points li,
+            .steps li,
+            .chip {
+                transform: none;
+            }
+
+            .contact {
+                gap: 12px;
             }
         }
 
@@ -444,7 +555,8 @@
 
             const isCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
             const isSmallScreen = window.matchMedia('(max-width: 768px)').matches;
-            const fourCount = isSmallScreen || isCoarsePointer ? 72 : 120;
+            const baseClarity = isSmallScreen || isCoarsePointer ? 0.2 : 0;
+            const fourCount = isSmallScreen || isCoarsePointer ? 48 : 120;
             const fours = [];
 
             function clamp(value, min, max) {
@@ -458,7 +570,7 @@
             function setCanvasSize() {
                 width = window.innerWidth;
                 height = window.innerHeight;
-                const ratio = window.devicePixelRatio || 1;
+                const ratio = Math.min(window.devicePixelRatio || 1, isSmallScreen || isCoarsePointer ? 1.5 : 2);
                 canvas.width = Math.floor(width * ratio);
                 canvas.height = Math.floor(height * ratio);
                 canvas.style.width = width + 'px';
@@ -512,7 +624,7 @@
             function updateScrollProgress() {
                 const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
                 const ratio = scrollHeight <= 0 ? 1 : window.scrollY / scrollHeight;
-                scrollProgress = clamp(ratio, 0, 1);
+                scrollProgress = clamp(baseClarity + ratio * (1 - baseClarity), 0, 1);
                 root.style.setProperty('--clarity', scrollProgress.toFixed(3));
                 root.style.setProperty('--tracking', (0.2 - scrollProgress * 0.15).toFixed(3) + 'em');
                 root.style.setProperty('--blur', (18 - scrollProgress * 10).toFixed(2) + 'px');
@@ -530,10 +642,12 @@
                     item.vx += Math.sin(item.wobble) * 0.012 * chaos;
                     item.vy += Math.cos(item.wobble * 1.14) * 0.012 * chaos;
 
-                    const mDx = (mouseX - item.x) / width;
-                    const mDy = (mouseY - item.y) / height;
-                    item.vx += mDx * 0.015 * chaos;
-                    item.vy += mDy * 0.015 * chaos;
+                    if (!isCoarsePointer) {
+                        const mDx = (mouseX - item.x) / width;
+                        const mDy = (mouseY - item.y) / height;
+                        item.vx += mDx * 0.015 * chaos;
+                        item.vy += mDy * 0.015 * chaos;
+                    }
 
                     item.x += item.vx;
                     item.y += item.vy;
@@ -569,10 +683,12 @@
                 rebuildFours();
                 updateScrollProgress();
             });
-            window.addEventListener('pointermove', function (event) {
-                mouseX = event.clientX;
-                mouseY = event.clientY;
-            }, { passive: true });
+            if (!isCoarsePointer) {
+                window.addEventListener('pointermove', function (event) {
+                    mouseX = event.clientX;
+                    mouseY = event.clientY;
+                }, { passive: true });
+            }
 
             if (window.visualViewport) {
                 window.visualViewport.addEventListener('resize', function () {
